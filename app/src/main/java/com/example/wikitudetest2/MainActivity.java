@@ -7,6 +7,9 @@ import com.wikitude.architect.ArchitectStartupConfiguration;
 import com.wikitude.architect.WearableArchitectView;
 
 
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,12 +20,18 @@ import static android.os.Build.VERSION_CODES.N;
 public class MainActivity extends AppCompatActivity {
 
 
+
     private WearableArchitectView wearableArchitectView;
+    private static final int WIKITUDE_PERMISSIONS_REQUEST_CAMERA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED )
+        { ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, WIKITUDE_PERMISSIONS_REQUEST_CAMERA); }
+
 
         this.wearableArchitectView = (WearableArchitectView)this.findViewById( R.id.wearableArchitectView );
         final ArchitectStartupConfiguration config = new ArchitectStartupConfiguration();
@@ -44,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         wearableArchitectView.onPostCreate();
 
         try {
-            this.wearableArchitectView.load("html:///android_asset/index/html");
+            this.wearableArchitectView.load("http://android_assets/Demo1/index.html");
 
         } catch (Exception e) {
 
